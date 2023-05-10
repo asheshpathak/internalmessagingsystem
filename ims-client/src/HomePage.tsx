@@ -16,6 +16,8 @@ import {
   InputLabel,
   FormHelperText,
   TextField,
+  AppBar,
+  Toolbar,
 } from "@mui/material";
 import React, { RefObject, useState } from "react";
 import { List, ListItem, ListItemText, Divider } from "@mui/material";
@@ -34,7 +36,14 @@ import { error } from "console";
 //   },
 // });
 
+// const useStyles = makeStyles({
+//   logo: {
+//     maxWidth: 5,
+//   },
+// });
+
 export const SideNav = () => {
+  // const classes = useStyles();
   // const classes = useStyles;
   // const [isDrawerOpen, setIsDrawerOpen] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,7 +64,7 @@ export const SideNav = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
     // console.log(event.target.name);
-    if (event.target.name === "to") {
+    if (event.target.name === "appointee") {
       setReceiver(event.target.value);
     }
     if (event.target.name === "subject") {
@@ -64,7 +73,7 @@ export const SideNav = () => {
     if (event.target.name === "body") {
       setMessageBody(event.target.value);
     }
-    console.log(payload);
+    // console.log(payload);
   };
 
   const handleFileSelection = (
@@ -90,8 +99,9 @@ export const SideNav = () => {
   const handleSubmit = () => {
     // console.log(fileSource?.type);
     const formData: any = new FormData();
-    console.log(fileSource);
+    // console.log(fileSource);
     formData.append("file", fileSource);
+    formData.append("payload", JSON.stringify(payload));
 
     axios
       .post("http://localhost:5000/api/upload", formData, {
@@ -108,18 +118,11 @@ export const SideNav = () => {
       })
       .catch((error) => {
         // handle errors
-        console.log(error);
+        // console.log(error);
         console.error(error.response.data);
       });
 
-    axios
-      .get("http://localhost:5000/api/getFiles")
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    setIsModalOpen(false);
   };
 
   return (
@@ -141,8 +144,37 @@ export const SideNav = () => {
             m={0}
           >
             <List>
-              <Box sx={{ display: "flex", justifyContent: "center" }} p={2}>
-                <Typography variant="h4">IMS Client</Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                p={2}
+              >
+                {/* <AppBar color="inherit">
+                  <Toolbar> */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  <img
+                    src="../logo65.png"
+                    alt="logo"
+                    width="50px"
+                    height="50px"
+                  />
+                </Box>
+                {/* </Toolbar>
+                </AppBar> */}
+                <Typography variant="h6">65 ARMD EOFFICE</Typography>
               </Box>
               <Divider />
             </List>
@@ -159,7 +191,7 @@ export const SideNav = () => {
                   color="primary"
                   endIcon={<AddCircleOutlineIcon />}
                 >
-                  Create Mail
+                  Send Dak
                 </Button>
               </ListItem>
               <Link style={{ textDecoration: "none", color: "#EBEDEF" }} to="/">
@@ -231,6 +263,7 @@ export const SideNav = () => {
         <Box
           sx={{
             display: "flex",
+            flexDirection: "column",
             width: "70%",
             height: "70%",
             bgcolor: "#fff",
@@ -243,14 +276,15 @@ export const SideNav = () => {
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
           </Typography> */}
+          <Typography variant="h4">Create new Appointment</Typography>
           <FormControl sx={{ width: "100%" }}>
             <TextField
-              name="to"
+              name="appointee"
               onChange={handleInputEvent}
               fullWidth
               sx={{ m: 1 }}
               id="outlined-basic"
-              label="To"
+              label="Apointee"
               variant="outlined"
             />
             <TextField

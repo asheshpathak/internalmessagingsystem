@@ -79,12 +79,16 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
   // console.log(req.file);
 
   try {
+    const payload = JSON.parse(req.body.payload);
+    console.log(payload);
     const newFile = await File.create({
       name: req.file.filename,
+      payload: payload,
     });
     res.status(200).json({
       status: "success",
       message: "File created successfully!!",
+      //   payload: req.body.payload,
     });
   } catch (error) {
     res.json({
@@ -96,6 +100,7 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
 app.get("/api/getFiles", async (req, res) => {
   try {
     const files = await File.find();
+    console.log(files);
     res.status(200).json({
       status: "success",
       files,
