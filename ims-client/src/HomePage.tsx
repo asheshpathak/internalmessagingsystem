@@ -26,6 +26,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Link, Outlet } from "react-router-dom";
 import axios from "axios";
+import { error } from "console";
 
 // const useStyles = makeStyles({
 //   root: {
@@ -49,7 +50,6 @@ export const SideNav = () => {
     messageBody: messageBody,
     file: fileSource,
   };
-  const formData: any = new FormData();
 
   const handleInputEvent = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -88,16 +88,18 @@ export const SideNav = () => {
   };
 
   const handleSubmit = () => {
-    console.log(payload);
-    formData.append("file", JSON.stringify(fileSource));
+    // console.log(fileSource?.type);
+    const formData: any = new FormData();
+    console.log(fileSource);
+    formData.append("file", fileSource);
+
     axios
-      .post("http://localhost:5000/upload", formData, {
+      .post("http://localhost:5000/api/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          "x-rapidapi-host": "file-upload8.p.rapidapi.com",
-          "x-rapidapi-key": "your-rapidapi-key-here",
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS",
+          // "Content-Type": "application/json",
+          // "x-rapidapi-host": "file-upload8.p.rapidapi.com",
+          // "x-rapidapi-key": "your-rapidapi-key-here",
         },
       })
       .then((response) => {
@@ -106,6 +108,16 @@ export const SideNav = () => {
       })
       .catch((error) => {
         // handle errors
+        console.log(error);
+        console.error(error.response.data);
+      });
+
+    axios
+      .get("http://localhost:5000/api/getFiles")
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
         console.log(error);
       });
   };
@@ -269,6 +281,7 @@ export const SideNav = () => {
             <Input
               sx={{ m: 1 }}
               type="file"
+              name="file"
               ref={fileSelected}
               // onInput={() => handleFileSelection()}
               onChange={handleFileSelection}
